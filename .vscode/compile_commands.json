@@ -1,0 +1,6 @@
+[
+{
+  "directory": "/home/guy/Bureau/rt",
+  "arguments": ["/usr/bin/g++", "-c", "-m64", "-g", "-O0", "-std=c++26", "-Iinc", "-o", "build/.objs/rt/linux/x86_64/debug/src/main.cpp.o", "src/main.cpp"],
+  "file": "src/main.cpp"
+}]

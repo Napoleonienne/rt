@@ -2,10 +2,12 @@
 #include "vector.hpp"
 #include <iostream>
 #include <print>
+#include "cstdio"
+#include <fstream>
 
 using color = vec3;
 
-void write_color( const color& pixel_color) {
+void write_color( const color& pixel_color,std::ofstream &f) {
     auto r = pixel_color.x();
     auto g = pixel_color.y();
     auto b = pixel_color.z();
@@ -15,5 +17,5 @@ void write_color( const color& pixel_color) {
     int gbyte = int(255.999 * g);
     int bbyte = int(255.999 * b);
 
-    std::println("{} {} {}", rbyte, gbyte, bbyte);
+    std::println(f,"{} {} {}", rbyte, gbyte, bbyte);
 }

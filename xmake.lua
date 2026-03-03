@@ -1,8 +1,12 @@
 add_rules("mode.debug", "mode.release")
-set_languages("c++26")
+set_languages("c++26","c23")
+
+
+add_requires("glm")
 target("rt")
     set_kind("binary")
     add_files("src/*.cpp")
+    add_packages("glm")
     add_includedirs("inc")
 
 --

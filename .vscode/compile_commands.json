@@ -1,6 +1,6 @@
 [
 {
   "directory": "/home/guy/Bureau/rt",
-  "arguments": ["/usr/bin/g++", "-c", "-m64", "-g", "-O0", "-std=c++26", "-Iinc", "-I", "/home/guy/.xmake/packages/g/glm/1.0.3/dbf9c4e3c02245fb83daec08ad7da1e6/include", "-o", "build/.objs/rt/linux/x86_64/debug/src/main.cpp.o", "src/main.cpp"],
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "--target=x86_64-linux-gnu", "-fPIC", "-g", "-O0", "-std=c++26", "-Iinc", "-I/home/guy/.local/share/xmake/scripts/module", "-I/home/guy/.local/share/xmake/scripts/module/luawrap", "-Ibuild/.gens/rt/linux/x86_64/debug/rules/utils/bin2c", "-I", "/home/guy/.xmake/packages/g/glm/1.0.3/edce8ea0eff64febb086d70410650481/include", "-fmodules", "-fbuiltin-module-map", "-stdlib=libc++", "-o", "build/.objs/rt/linux/x86_64/debug/src/main.cpp.o", "src/main.cpp"],
   "file": "src/main.cpp"
 }]

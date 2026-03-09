@@ -1,5 +1,5 @@
-#include <vector.hpp>
-#include <vector>
+import std;
+
 
 
 
@@ -11,14 +11,11 @@ struct bufferm
     std::vector<vec3> buff;
     int largeur;
     int hauteur;
-    bufferm(int largeur,int hauteur){
-        this->hauteur = hauteur;
-        this->largeur = largeur;
-        this->buff = std::vector<vec3>(largeur*hauteur);
+    bufferm(int l, int h) : buff(l * h), largeur(l), hauteur(h) {
     }
-    vec3 operator[](int x,int y){
-        int pos = (y*this->largeur) +x;
-        return this->buff.at(pos);
+
+    vec3& operator[](int x, int y)  {
+        return buff[(y * largeur) + x];
     }
 
 

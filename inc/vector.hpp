@@ -1,12 +1,5 @@
-#pragma once
+import std;
 
-#include <array>
-#include <cmath>
-#include <concepts>
-#include <format>
-#include <iostream>
-#include <print>
-#include <compare>
 
 //calss vecteur 3  //
 class vec3 {
@@ -24,7 +17,12 @@ public:
     [[nodiscard]] constexpr double operator[](int i) const { return e[i]; }
     [[nodiscard]] constexpr double& operator[](int i) { return e[i]; }
 
-    constexpr auto operator<=>(const vec3&) const noexcept = default;
+
+    bool operator==(const vec3& other) const{
+
+        if (this->e == other.e) return true;
+        return false;
+    };
 
     constexpr vec3& operator+=(const vec3& v) noexcept {
         e[0] += v.e[0]; e[1] += v.e[1]; e[2] += v.e[2];

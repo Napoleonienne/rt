@@ -4,12 +4,13 @@ set_languages("c++26", "c23")
 -- Enable native C++20 module support
 set_policy("build.c++.modules", true)
 
-add_requires("glm")
 target("rt")
     set_kind("binary")
+    -- Required to resolve `import std;` — needs xmake >= 2.9.1 and
+    -- Clang 18+ with libc++, GCC 15+, or MSVC 17.4+
+    add_rules("c++.std_modules")
     -- Compile module interface units (.cppm) before the main translation unit
     add_files("modules/*.cppm", "src/*.cpp")
-    add_packages("glm")
 
     add_cxflags("-stdlib=libc++")
     add_ldflags("-stdlib=libc++")

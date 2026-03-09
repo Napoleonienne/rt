@@ -1,20 +1,16 @@
 add_rules("mode.debug", "mode.release")
-set_languages("c++26","c23")
+set_languages("c++26", "c23")
 
--- set_policy("build.c++.modules",true )
+-- Enable native C++20 module support
+set_policy("build.c++.modules", true)
 
 add_requires("glm")
 target("rt")
     set_kind("binary")
-    add_rules("utils.bin2c", {extensions = {".cppm", ".mxx"}})
-    add_rules("module.shared")
-    add_files("src/*.cpp")
+    -- Compile module interface units (.cppm) before the main translation unit
+    add_files("modules/*.cppm", "src/*.cpp")
     add_packages("glm")
-    add_includedirs("inc")
 
-    add_cxflags("-fmodules", "-fbuiltin-module-map")
-
-    
     add_cxflags("-stdlib=libc++")
     add_ldflags("-stdlib=libc++")
 --

@@ -1,12 +1,8 @@
-module;
-#include "vector.hpp"
-#include "color.h"
-#include "ray.h"
-#include "utility.hpp"
-#include "fstream"
-
-export module main;
 import std;
+import vector;
+import color;
+import ray;
+import utility;
 constexpr auto aspect_ratio = 16.0 / 9.0;
 constexpr int image_width = 800;
 

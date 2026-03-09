@@ -25,12 +25,12 @@ auto viewport_u = vec3(viewport_width, 0, 0);
 auto viewport_v = vec3(0, -viewport_height, 0);
 
 // Calculate the horizontal and vertical delta vectors from pixel to pixel.
-auto pixel_delta_u = viewport_u / image_width;
-auto pixel_delta_v = viewport_v / image_height;
+auto pixel_delta_u = viewport_u / static_cast<double>(image_width);
+auto pixel_delta_v = viewport_v / static_cast<double>(image_height);
 
 // Calculate the location of the upper left pixel.
 auto viewport_upper_left = camera_center
-                            - vec3(0, 0, focal_length) - viewport_u/2 - viewport_v/2;
+                            - vec3(0, 0, focal_length) - viewport_u/2.0 - viewport_v/2.0;
 auto pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
 
 
@@ -43,9 +43,9 @@ auto pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
 
 double hit_sphere(const point3& center, double radius, const ray& r) {
     vec3 oc = center - r.origin();
-    auto a = r.direction().length_squared();
+    auto a = glm::dot(r.direction(), r.direction());
     auto h = dot(r.direction(), oc);
-    auto c = oc.length_squared() - radius*radius;
+    auto c = glm::dot(oc, oc) - radius*radius;
     auto discriminant = h*h - a*c;
 
     if (discriminant < 0) {
@@ -67,11 +67,11 @@ color ray_color(const ray& r) {
     if (hit>0){
 
         vec3 N = unit_vector(r.at(hit) - vec3(0,0,-1));
-        return 0.5*color(N.x()+1, N.y()+1, N.z()+1);
+        return 0.5*color(N.x+1, N.y+1, N.z+1);
     }
 
     vec3 unit_direction = unit_vector(r.direction());
-    auto a = 0.5*(unit_direction.y() + 1.0);
+    auto a = 0.5*(unit_direction.y + 1.0);
     return (1.0-a)*color(1.0, 1.0, 1.0) + a*color(0.5, 0.7, 1.0);
 }
 
@@ -95,7 +95,7 @@ auto pixels = std::views::cartesian_product(
 );
 
     for (auto [j, i] : pixels) {
-        auto pixel_center = pixel00_loc + (i * pixel_delta_u) + (j * pixel_delta_v);
+        auto pixel_center = pixel00_loc + (static_cast<double>(i) * pixel_delta_u) + (static_cast<double>(j) * pixel_delta_v);
         auto ray_direction = pixel_center - camera_center;
         ray r(camera_center, ray_direction);
 

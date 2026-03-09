@@ -60,8 +60,8 @@ float smootherstep(float edge0, float edge1, float x) {
 
 
 uint hash(vec3 input){
-    int X = int(std::floor(input.x())) & 255;
-    int Y = int(std::floor(input.y())) & 255;
+    int X = int(std::floor(input.x)) & 255;
+    int Y = int(std::floor(input.y)) & 255;
     //int Z = int(std::floor(input.z())) & 255;
     uint res = permu[permu[permu[X] + Y]];
 

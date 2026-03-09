@@ -6,17 +6,11 @@ set_languages("c++26","c23")
 add_requires("glm")
 target("rt")
     set_kind("binary")
-    add_rules("utils.bin2c", {extensions = {".cppm", ".mxx"}})
-    add_rules("module.shared")
     add_files("src/*.cpp")
     add_packages("glm")
     add_includedirs("inc")
 
-    add_cxflags("-fmodules", "-fbuiltin-module-map")
 
-    
-    add_cxflags("-stdlib=libc++")
-    add_ldflags("-stdlib=libc++")
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
 --

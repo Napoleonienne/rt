@@ -10,6 +10,7 @@
             "cStandard": "c23",
             "cppStandard": "c++26",
             "intelliSenseMode": "linux-clang-x64"
+            
         }
     ],
     "version": 4

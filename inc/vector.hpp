@@ -1,4 +1,8 @@
-import std;
+#pragma once
+#include <array>
+#include <cmath>
+#include <iostream>
+#include <iterator>
 
 
 //calss vecteur 3  //
@@ -106,5 +110,6 @@ struct std::formatter<vec3> : std::formatter<std::string_view> {
 };
 
 inline std::ostream& operator<<(std::ostream& out, const vec3& v) {
-    return out << std::format("{}", v);
+    std::format_to(std::ostream_iterator<char>(out), "{:.0f} {:.0f} {:.0f}", v.x(), v.y(), v.z());
+    return out;
 }

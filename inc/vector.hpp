@@ -1,23 +1,18 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <glm/gtc/constants.hpp>
 #include <format>
 #include <iostream>
 #include <iterator>
+#include <ranges>
+
+
+
+using vec2   = glm::dvec2;
 
 using vec3   = glm::dvec3;
 using point3 = glm::dvec3;
 
-[[nodiscard]] inline double dot(const vec3& u, const vec3& v) noexcept {
-    return glm::dot(u, v);
-}
-
-[[nodiscard]] inline vec3 cross(const vec3& u, const vec3& v) noexcept {
-    return glm::cross(u, v);
-}
-
-[[nodiscard]] inline vec3 unit_vector(const vec3& v) noexcept {
-    return glm::normalize(v);
-}
 
 // Formatting
 template <>
@@ -29,5 +24,16 @@ struct std::formatter<vec3> : std::formatter<std::string_view> {
 
 inline std::ostream& operator<<(std::ostream& out, const vec3& v) {
     std::format_to(std::ostream_iterator<char>(out), "{:.0f} {:.0f} {:.0f}", v.x, v.y, v.z);
+    return out;
+}
+template <>
+struct std::formatter<vec2> : std::formatter<std::string_view> {
+    auto format(const vec2& v, format_context& ctx) const {
+        return std::format_to(ctx.out(), "{:.0f} {:.0f} ", v.x, v.y);
+    }
+};
+
+inline std::ostream& operator<<(std::ostream& out, const vec2& v) {
+    std::format_to(std::ostream_iterator<char>(out), "{:.0f} {:.0f}", v.x, v.y);
     return out;
 }

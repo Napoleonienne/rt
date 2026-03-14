@@ -5,6 +5,7 @@
 #include "fstream"
 #include <algorithm>
 #include <ranges>
+#include <perlinnoise.hpp>
 
 
 constexpr auto aspect_ratio = 16.0 / 9.0;
@@ -66,17 +67,17 @@ color ray_color(const ray& r) {
     double hit = hit_sphere(point3(0,0,-1.f), 0.5, r);
     if (hit>0){
 
-        vec3 N = unit_vector(r.at(hit) - vec3(0,0,-1));
+        vec3 N = glm::normalize(r.at(hit) - vec3(0,0,-1));
         return 0.5*color(N.x+1, N.y+1, N.z+1);
     }
 
-    vec3 unit_direction = unit_vector(r.direction());
+    vec3 unit_direction = glm::normalize(r.direction());
     auto a = 0.5*(unit_direction.y + 1.0);
     return (1.0-a)*color(1.0, 1.0, 1.0) + a*color(0.5, 0.7, 1.0);
 }
 
 
-void dump(const bufferm &buffer, std::ofstream &f) {
+void dump(const bufferm<vec3> &buffer, std::ofstream &f) {
     std::ranges::for_each(buffer.buff, [&f](const vec3 &vec) {
         write_color(vec, f);
     });
@@ -87,12 +88,12 @@ void dump(const bufferm &buffer, std::ofstream &f) {
 
 
 
-void render(bufferm& buffer){
+void render(bufferm<vec3>& buffer){
 // Dans la fonction vide
-auto pixels = std::views::cartesian_product(
-    std::views::iota(0, image_height), // Les lignes (j)
-    std::views::iota(0, image_width)   // Les colonnes (i)
-);
+    auto pixels = std::views::cartesian_product(
+        std::views::iota(0, image_height), // Les lignes (j)
+        std::views::iota(0, image_width)   // Les colonnes (i)
+    );
 
     for (auto [j, i] : pixels) {
         auto pixel_center = pixel00_loc + (static_cast<double>(i) * pixel_delta_u) + (static_cast<double>(j) * pixel_delta_v);
@@ -116,7 +117,8 @@ int main(){
 
 
 // Dans le main
-    bufferm buffer(image_width,image_height);
+    bufferm<vec3> buffer(image_width,image_height);
+    perlin test(123514,8,0.5,2.0);
     // Render
     for(int k: std::views::iota(0, 1) ) {
         auto op = std::format("image{}.ppm",k);
@@ -140,9 +142,12 @@ int main(){
 
 }
 
- int a;
-
-
+std::ofstream file("perlin.pgm") ;
+std::println(file, "P2\n{} {} \n255", 512, 512);
+auto perlin_image = test.image(512,512);
+std::ranges::for_each(perlin_image.buff, [&file](const double &v) {
+        std::println(file, "{}", int(v));
+    });
 
 return 0;
 }

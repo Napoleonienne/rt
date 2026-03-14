@@ -3,72 +3,10 @@
 #include "vector.hpp"
 #include <utility.hpp>
 #include <vector>
-
-const uint permu[512] ={151, 160, 137, 91, 90, 15, 131, 13, 201, 95, 96, 53, 194, 233, 7, 225,
-  140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23, 190, 6, 148,
-  247, 120, 234, 75, 0, 26, 197, 62, 94, 252, 219, 203, 117, 35, 11, 32,
-  57, 177, 33, 88, 237, 149, 56, 87, 174, 20, 125, 136, 171, 168, 68, 175,
-  74, 165, 71, 134, 139, 48, 27, 166, 77, 146, 158, 231, 83, 111, 229, 122,
-  60, 211, 133, 230, 220, 105, 92, 41, 55, 46, 245, 40, 244, 102, 143, 54,
-  65, 25, 63, 161, 1, 216, 80, 73, 209, 76, 132, 187, 208, 89, 18, 169,
-  200, 196, 135, 130, 116, 188, 159, 86, 164, 100, 109, 198, 173, 186, 3, 64,
-  52, 217, 226, 250, 124, 123, 5, 202, 38, 147, 118, 126, 255, 82, 85, 212,
-  207, 206, 59, 227, 47, 16, 58, 17, 182, 189, 28, 42, 223, 183, 170, 213,
-  119, 248, 152, 2, 44, 154, 163, 70, 221, 153, 101, 155, 167, 43, 172, 9,
-  129, 22, 39, 253, 19, 98, 108, 110, 79, 113, 224, 232, 178, 185, 112, 104,
-  218, 246, 97, 228, 251, 34, 242, 193, 238, 210, 144, 12, 191, 179, 162, 241,
-  81, 51, 145, 235, 249, 14, 239, 107, 49, 192, 214, 31, 181, 199, 106, 157,
-  184, 84, 204, 176, 115, 121, 50, 45, 127, 4, 150, 254, 138, 236, 205, 93,
-  222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180,
-  
-  151, 160, 137, 91, 90, 15, 131, 13, 201, 95, 96, 53, 194, 233, 7, 225,
-  140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23, 190, 6, 148,
-  247, 120, 234, 75, 0, 26, 197, 62, 94, 252, 219, 203, 117, 35, 11, 32,
-  57, 177, 33, 88, 237, 149, 56, 87, 174, 20, 125, 136, 171, 168, 68, 175,
-  74, 165, 71, 134, 139, 48, 27, 166, 77, 146, 158, 231, 83, 111, 229, 122,
-  60, 211, 133, 230, 220, 105, 92, 41, 55, 46, 245, 40, 244, 102, 143, 54,
-  65, 25, 63, 161, 1, 216, 80, 73, 209, 76, 132, 187, 208, 89, 18, 169,
-  200, 196, 135, 130, 116, 188, 159, 86, 164, 100, 109, 198, 173, 186, 3, 64,
-  52, 217, 226, 250, 124, 123, 5, 202, 38, 147, 118, 126, 255, 82, 85, 212,
-  207, 206, 59, 227, 47, 16, 58, 17, 182, 189, 28, 42, 223, 183, 170, 213,
-  119, 248, 152, 2, 44, 154, 163, 70, 221, 153, 101, 155, 167, 43, 172, 9,
-  129, 22, 39, 253, 19, 98, 108, 110, 79, 113, 224, 232, 178, 185, 112, 104,
-  218, 246, 97, 228, 251, 34, 242, 193, 238, 210, 144, 12, 191, 179, 162, 241,
-  81, 51, 145, 235, 249, 14, 239, 107, 49, 192, 214, 31, 181, 199, 106, 157,
-  184, 84, 204, 176, 115, 121, 50, 45, 127, 4, 150, 254, 138, 236, 205, 93,
-  222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180
-  
-};
-
-
-
-
-float clamp(float x, float lowerlimit = 0.0f, float upperlimit = 1.0f) {
-  if (x < lowerlimit) return lowerlimit;
-  if (x > upperlimit) return upperlimit;
-  return x;
-}
-
-float smootherstep(float edge0, float edge1, float x) {
-  // Scale, and clamp x to 0..1 range
-  x = clamp((x - edge0) / (edge1 - edge0));
-
-  return x * x * x * (x * (6.0f * x - 15.0f) + 10.0f);
-}
-
-
-
-
-uint hash(vec3 input){
-    int X = int(std::floor(input.x)) & 255;
-    int Y = int(std::floor(input.y)) & 255;
-    //int Z = int(std::floor(input.z())) & 255;
-    uint res = permu[permu[permu[X] + Y]];
-
-    return res;
-}
-
-
+#include <random>
+#include <algorithm>
+#include <array>
+#include <utility.hpp>
 
 
 
@@ -81,19 +19,173 @@ class perlin{
 
 
 public:
-    perlin(int seed,int Octaves,float Lacunarite,float Persistance): nbcouche(Octaves), Lacunarite(Lacunarite), Persistance(Persistance) {};
+    perlin(const int seed,int Octaves,float Persistance,float Lacunarite=2.):seed(seed), Octaves(Octaves), Lacunarite(Lacunarite), Persistance(Persistance){
+      remplir_tab();
+      
+    }
+
+
+    bufferm<int> image(const int l, const int h){
+
+      bufferm<int> bil(l,h);
+      auto pixels = std::views::cartesian_product(
+        std::views::iota(0, l), // Les lignes (j)
+        std::views::iota(0, h)   // Les colonnes (i)
+    );
+
+    for (auto [j, i] : pixels) {
+      bil[j,i] = std::floor(valeur_pixel2d(vec2(i,j))*255.0);
+
+    }
+    return bil;
+
+  }
 
 
 
 
 
 
+
+    double valeur_pixel2d(vec2 point){
+      double va = 0.;
+      double max=0.;
+      double fr = 1.0;
+      double per = 1.0;
+
+
+      for(auto _ :std::views::iota(Octaves)){
+        
+        va += valeur_pixel_iter12d(point*fr)*per;
+        max +=per;
+        per *= Persistance;
+        fr *= Lacunarite;
+
+      }
+      return va/max;
+
+    }
+
+
+  
+
+
+
+
+
+
+
+
+    
     private:
-    int nbcouche;
-    int seed;
+
+    int Octaves;
+    const int seed;
     float Lacunarite;
     float Persistance;
+    std::array<double, 512> tableau;
 
+
+
+
+
+    double valeur_pixel_iter12d(vec2 point){
+      double x = std::floor(point.x);
+      double y = std::floor(point.y);
+
+      vec2 c1(x,y);
+      vec2 c2(x+1,y);
+      vec2 c3(x,y+1);
+      vec2 c4(x+1,y+1);
+
+
+      auto v1 = vecteur_aleatoire(c1);
+      auto v2 = vecteur_aleatoire(c2);
+      auto v3 = vecteur_aleatoire(c3);
+      auto v4 = vecteur_aleatoire(c4);
+
+
+      std::array<float,4> scalaire;
+      
+          vec2 nv = point -  c1;
+          scalaire[0] =dot(v1, nv);
+          nv = point -  c2;
+          scalaire[1] =dot(v2, nv);
+          nv = point -  c3;
+          scalaire[2] =dot(v3, nv);
+          nv = point -  c4;
+          scalaire[3] =dot(v4, nv); 
+
+
+
+
+
+      float sx = point.x - x;
+      float sy = point.y - y;
+      
+      
+      float a = interpolate(scalaire[0], scalaire[1], sx);
+      float b = interpolate(scalaire[2], scalaire[3], sx);
+      return interpolate(a, b, sy);
+
+    
+
+
+    }
+
+
+    void remplir_tab(){
+  std::iota(tableau.begin(), tableau.begin() + 256, 0);     
+  std::mt19937 moteur_entropique(seed);
+    std::shuffle(tableau.begin(), tableau.begin() + 256, moteur_entropique);
+    std::copy(tableau.begin(), tableau.begin() + 256, tableau.begin() + 256);
+
+    }
+
+
+  float clamp(float x,const float lowerlimit = 0.0f,const float upperlimit = 1.0f) {
+  if (x < lowerlimit) return lowerlimit;
+  if (x > upperlimit) return upperlimit;
+  return x;
+  }
+
+  float smootherstep(float x) {
+  // Scale, and clamp x to 0..1 range
+  x = clamp(x);
+
+  return x * x * x * (x * (6.0f * x - 15.0f) + 10.0f);
+  }
+       float interpolate(float a0, float a1, float w) {
+     return a0 + (a1 - a0) * smootherstep(w);
+ }
+
+  constexpr double hash2d(const vec2 input){
+    int X = int(std::floor(input.x)) & 255;
+    int Y = int(std::floor(input.y)) & 255;
+    double res = tableau[tableau[tableau[X] + Y]];
+
+    return res;
+  }
+
+
+  constexpr double hash3d(const vec3 input){
+    int X = int(std::floor(input.x)) & 255;
+    int Y = int(std::floor(input.y)) & 255;
+    int Z = int(std::floor(input.z)) & 255;
+    double res = tableau[tableau[tableau[X] + Y]];
+
+    return res;
+  }
+
+
+  inline vec2 vecteur_aleatoire(const vec2 v){
+  double angle = (hash2d(v)/255.0)*glm::pi<double>()*2;
+  vec2 res = {glm::cos(angle),glm::sin(angle)};
+
+
+  return res;
+
+  }
 
 
 
@@ -102,3 +194,4 @@ public:
 
 
 };
+

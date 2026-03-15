@@ -139,16 +139,19 @@ int main(){
 
 
 }
-    perlin test(1414,8,0.5);
+perlin test(854524,3,0.5);
 
 std::ofstream file("perlin.pgm") ;
-std::println(file, "P2\n{} {} \n255", 512, 512);
 
-for(int i: std::views::iota(0, 128)){
-    for(int j: std::views::iota(0, 128)){
-        std::println("{}",test.valeur_pixel2d(vec2(i,j))*255.0);
-    }
+std::println(file, "P2\n{} {} \n255", image_width, image_height);
+auto img = test.image(image_width, image_height).buff;
+
+for(auto k:img){
+    std::println(file, "{}",k);
+
 }
+
+
 
 
 

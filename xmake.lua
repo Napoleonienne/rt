@@ -1,7 +1,6 @@
 add_rules("mode.debug", "mode.release")
 set_languages("c++26","c23")
 
--- set_policy("build.c++.modules",true )
 
 add_requires("glm")
 target("rt")

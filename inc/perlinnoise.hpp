@@ -6,7 +6,6 @@
 #include <random>
 #include <algorithm>
 #include <array>
-#include <utility.hpp>
 
 
 
@@ -14,7 +13,7 @@
 
 
 
-
+//template<typename T>
 class perlin{
 
 
@@ -34,7 +33,9 @@ public:
     );
 
     for (auto [j, i] : pixels) {
+
       bil[j,i] = std::floor(valeur_pixel2d(vec2(i,j))*255.0);
+
 
     }
     return bil;
@@ -47,7 +48,7 @@ public:
 
 
 
-    double valeur_pixel2d(vec2 point){
+    double valeur_pixel2d(vec2   point){
       double va = 0.;
       double max=0.;
       double fr = 1.0;
@@ -62,7 +63,7 @@ public:
         fr *= Lacunarite;
 
       }
-      return va/max;
+      return ((va/max)+1)/2.0;
 
     }
 
@@ -162,7 +163,7 @@ public:
   constexpr double hash2d(const vec2 input){
     int X = int(std::floor(input.x)) & 255;
     int Y = int(std::floor(input.y)) & 255;
-    double res = tableau[tableau[tableau[X] + Y]];
+    double res = tableau[tableau[X] + Y];
 
     return res;
   }

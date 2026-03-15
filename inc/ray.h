@@ -102,6 +102,8 @@ public:
         vec3 b =center + vec3(largeur/2,hauteur/2,0);
         vec3 c = center + vec3(largeur/2,-hauteur/2,0);
         vec3 d = center - vec3(largeur/2,-hauteur/2,0);
+
+        return (object::sphere(a,0.01).hit(r, ray_tmin, ray_tmax, rec) || object::sphere(b,0.01).hit(r, ray_tmin, ray_tmax, rec) || object::sphere(c,0.01).hit(r, ray_tmin, ray_tmax, rec) || object::sphere(d,0.01).hit(r, ray_tmin, ray_tmax, rec));
         
 
       }

@@ -118,7 +118,6 @@ int main(){
 
 // Dans le main
     bufferm<vec3> buffer(image_width,image_height);
-    perlin test(123514,8,0.5,2.0);
     // Render
     for(int k: std::views::iota(0, 1) ) {
         auto op = std::format("image{}.ppm",k);
@@ -128,26 +127,30 @@ int main(){
 
 
 
-  //      auto infinite_range = std::views::iota(0);
 
 
-        std::clog << "\rframes : " << k << ' ' << std::flush;
+        // std::clog << "\rframes : " << k << ' ' << std::flush;
 
 
 
 
     dump(buffer,FILE);
-    std::clog << "\rDone.                 \n";
+    //std::clog << "\rDone.                 \n";
 
 
 }
+    perlin test(1414,8,0.5);
 
 std::ofstream file("perlin.pgm") ;
 std::println(file, "P2\n{} {} \n255", 512, 512);
-auto perlin_image = test.image(512,512);
-std::ranges::for_each(perlin_image.buff, [&file](const double &v) {
-        std::println(file, "{}", int(v));
-    });
+
+for(int i: std::views::iota(0, 128)){
+    for(int j: std::views::iota(0, 128)){
+        std::println("{}",test.valeur_pixel2d(vec2(i,j))*255.0);
+    }
+}
+
+
 
 return 0;
 }

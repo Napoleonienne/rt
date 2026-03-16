@@ -1,6 +1,6 @@
 [
 {
   "directory": "/home/guy/Bureau/rt",
-  "arguments": ["/usr/bin/g++", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++26", "-Iinc", "-I", "/home/guy/.xmake/packages/g/glm/1.0.3/dbf9c4e3c02245fb83daec08ad7da1e6/include", "-DNDEBUG", "-o", "build/.objs/rt/linux/x86_64/release/src/main.cpp.o", "src/main.cpp"],
+  "arguments": ["/usr/bin/clang++-21", "-c", "-Qunused-arguments", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++26", "-Iinc", "-DNDEBUG", "-o", "build/.objs/rt/linux/x86_64/release/src/main.cpp.o", "src/main.cpp"],
   "file": "src/main.cpp"
 }]

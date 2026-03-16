@@ -21,7 +21,7 @@
 }};
 
 
-
+namespace noise{
 //template<typename T>
 class perlin{
 
@@ -215,12 +215,13 @@ public:
     
 std::for_each(std::execution::par, pixels.begin(), pixels.end(), [&](auto coord) {
     auto [j, i] = coord;
-    bil[j, i] = std::floor(valeur_pixel2d(vec2(i, j)) * 255.0);
+    bil[j, i] = std::floor(valeur_pixel2d(vec2(i, j)/resolution) * 255.0);
 });
     return bil;
 
   }
 
+  void set_resolution(float va){ this->resolution = va;}
 
 
     double valeur_pixel2d(vec2   point){
@@ -229,6 +230,7 @@ std::for_each(std::execution::par, pixels.begin(), pixels.end(), [&](auto coord)
       double max=0.;
       double fr = 1.0;
       double per = 1.0;
+      float resolution=32.F;
 
 
       for(auto _ :std::views::iota(0,Octaves)){
@@ -334,4 +336,4 @@ std::for_each(std::execution::par, pixels.begin(), pixels.end(), [&](auto coord)
 
 
 };
-
+}

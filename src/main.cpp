@@ -139,7 +139,7 @@ int main(){
 
 
 }
-perlin test(854524,3,0.5);
+perlin test(854524,3,0.75,glm::pi<double>());
 
 std::ofstream file("perlin.pgm") ;
 

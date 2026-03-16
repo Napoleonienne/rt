@@ -7,7 +7,6 @@
 #include <ranges>
 
 
-
 using vec2   = glm::dvec2;
 
 using vec3   = glm::dvec3;

@@ -54,7 +54,7 @@ std::for_each(std::execution::par, pixels.begin(), pixels.end(), [&](auto coord)
 
 
     double valeur_pixel2d(vec2   point){
-      point = point / 32.0;
+      point = point / resolution;
       double va = 0.;
       double max=0.;
       double fr = 1.0;
@@ -81,7 +81,7 @@ std::for_each(std::execution::par, pixels.begin(), pixels.end(), [&](auto coord)
 
 
 
-
+    void set_resolution(double x){resolution = x;}
 
     
     private:
@@ -90,6 +90,7 @@ std::for_each(std::execution::par, pixels.begin(), pixels.end(), [&](auto coord)
     const int seed;
     float Lacunarite;
     float Persistance;
+    double resolution =32.;
     std::array<double, 512> tableau;
 
 
@@ -254,6 +255,7 @@ std::for_each(std::execution::par, pixels.begin(), pixels.end(), [&](auto coord)
     std::array<double, 512> tableau;
     double G2 = (3.0 - std::sqrt(3.0)) / 6.0;
     float F2=(glm::sqrt(3.0)-1.)/2.;
+    double resolution =32.;
 
 
     double valeur_pixel_iter12d(vec2 point){
@@ -278,17 +280,7 @@ std::for_each(std::execution::par, pixels.begin(), pixels.end(), [&](auto coord)
 
 
 
-
-      auto v1 = vecteur_aleatoire(p1);
-      auto v2 = vecteur_aleatoire(p2);
-      auto v3 = vecteur_aleatoire(p3);
-
-      double t0 = 0.5 - dx0*dx0 - dy0*dy0;
-      if (t0 > 0) {
-        t0 *= t0;
-        // t0^4 * produit_scalaire
-        contribution += (t0 * t0) * dot(vecteur_aleatoire(vec2(i, j)), vec2(dx0, dy0));
-      }
+   
 
 
 

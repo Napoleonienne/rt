@@ -143,7 +143,7 @@ std::print("\n");
 
     
 }
-
+void test();
 
 void mainloop(){
     // Dans le main
@@ -177,10 +177,20 @@ void mainloop(){
 int main(){
 
  //mainloop();
- terrrain(77888,400,800);
+ terrrain(77888,40,40);
+
+ test();
 
 
-noise::perlin test(854524,3,0.75,glm::pi<double>());
+
+return 0;
+}
+
+
+
+void test(){
+
+noise::perlin test(5758,8,0.4,glm::pi<double>());
 
 std::ofstream file("perlin.pgm") ;
 
@@ -192,7 +202,4 @@ for(auto k:img){
 
 }
 
-
-
-return 0;
 }

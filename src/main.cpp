@@ -106,19 +106,50 @@ void render(bufferm<vec3>& buffer){
 
 }
 
+void terrrain(const int seed,int largeur,int hauteur){
+   noise::perlin monde(seed,8,0.25);   
+   bufferm< char> res(largeur,hauteur);
+
+   for(int x: std::views::iota(0,largeur)){
+
+    for(int y : std::views::iota(0,hauteur)){
+        auto j =monde.valeur_pixel2d(vec2(x,y));
+        if (j<30)
+        {
+        
+            std::print("r");
+        }
+        if (j<60)
+        {
+            std::print("U");
+        }
+        if (j<100)
+        {
+           std::print("L");
+        }
+        if (j<200)
+        {
+            std::print("m");
+        }
+        else
+        {
+            std::print("M");
+        }
+        
+           
+}
+std::print("\n");
+}
+
+    
+}
 
 
-
-
-
-
-
-int main(){
-
-
-// Dans le main
+void mainloop(){
+    // Dans le main
     bufferm<vec3> buffer(image_width,image_height);
     // Render
+
     for(int k: std::views::iota(0, 1) ) {
         auto op = std::format("image{}.ppm",k);
         std::ofstream FILE(op) ;
@@ -139,17 +170,15 @@ int main(){
 
 
 }
-perlin test(854524,3,0.5);
-
-std::ofstream file("perlin.pgm") ;
-
-std::println(file, "P2\n{} {} \n255", image_width, image_height);
-auto img = test.image(image_width, image_height).buff;
-
-for(auto k:img){
-    std::println(file, "{}",k);
-
 }
+
+
+
+int main(){
+
+ //mainloop();
+ terrrain(77888,400,800);
+
 
 
 

@@ -21,7 +21,7 @@
 }};
 
 
-
+namespace noise{
 //template<typename T>
 class perlin{
 
@@ -215,12 +215,13 @@ public:
     
 std::for_each(std::execution::par, pixels.begin(), pixels.end(), [&](auto coord) {
     auto [j, i] = coord;
-    bil[j, i] = std::floor(valeur_pixel2d(vec2(i, j)/128.0) * 255.0);
+    bil[j, i] = std::floor(valeur_pixel2d(vec2(i, j)/resolution) * 255.0);
 });
     return bil;
 
   }
 
+  void set_resolution(float va){ resolution = va;}
 
 
     double valeur_pixel2d(vec2   point){
@@ -228,6 +229,7 @@ std::for_each(std::execution::par, pixels.begin(), pixels.end(), [&](auto coord)
       double max=0.;
       double fr = 1.0;
       double per = 1.0;
+      float resolution=32.F;
 
 
       for(auto _ :std::views::iota(0,Octaves)){
@@ -268,46 +270,22 @@ std::for_each(std::execution::par, pixels.begin(), pixels.end(), [&](auto coord)
 
     double valeur_pixel_iter12d(vec2 point){
 
-      double x = std::floor(point.x);
-      double y = std::floor(point.y);
-
-      vec2 c1(x,y);
-      vec2 c2(x+1,y);
-      vec2 c3(x,y+1);
-      vec2 c4(x+1,y+1);
 
 
-      auto v1 = vecteur_aleatoire(c1);
-      auto v2 = vecteur_aleatoire(c2);
-      auto v3 = vecteur_aleatoire(c3);
-      auto v4 = vecteur_aleatoire(c4);
+      double F2 = (glm::sqrt(3)-1)/2;
+      double const s = (point.x+point.y)*F2;
 
+      double x = std::floor(point.x+s);
+      double y = std::floor(point.y+s);
 
-      std::array<float,4> scalaire;
-      
-          vec2 nv = point -  c1;
-          scalaire[0] =dot(v1, nv);
-          nv = point -  c2;
-          scalaire[1] =dot(v2, nv);
-          nv = point -  c3;
-          scalaire[2] =dot(v3, nv);
-          nv = point -  c4;
-          scalaire[3] =dot(v4, nv); 
+      vec2 p1 = vec2(x,y);
+      vec2 p2 = x<y ? vec2(x+1,y): vec2(x,y+1);
+      vec2 p3 = vec2(x+1,y+1);
 
 
 
 
-
-      float sx = point.x - x;
-      float sy = point.y - y;
-      
-      
-      float a = interpolate(scalaire[0], scalaire[1], sx);
-      float b = interpolate(scalaire[2], scalaire[3], sx);
-      return interpolate(a, b, sy);
-
-    
-
+      return 0.;
 
     }
 
@@ -321,21 +299,7 @@ std::for_each(std::execution::par, pixels.begin(), pixels.end(), [&](auto coord)
     }
 
 
-  float clamp(float x,const float lowerlimit = 0.0f,const float upperlimit = 1.0f) {
-  if (x < lowerlimit) return lowerlimit;
-  if (x > upperlimit) return upperlimit;
-  return x;
-  }
 
-  float smootherstep(float x) {
-  // Scale, and clamp x to 0..1 range
-  x = clamp(x);
-
-  return x * x * x * (x * (6.0f * x - 15.0f) + 10.0f);
-  }
-       float interpolate(float a0, float a1, float w) {
-     return a0 + (a1 - a0) * smootherstep(w);
- }
 
   constexpr int hash2d(const vec2 input){
     int X = int(std::floor(input.x)) & 255;
@@ -363,4 +327,4 @@ std::for_each(std::execution::par, pixels.begin(), pixels.end(), [&](auto coord)
 
 
 };
-
+}

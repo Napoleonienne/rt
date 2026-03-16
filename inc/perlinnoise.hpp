@@ -221,7 +221,7 @@ std::for_each(std::execution::par, pixels.begin(), pixels.end(), [&](auto coord)
 
   }
 
-  void set_resolution(float va){ resolution = va;}
+  void set_resolution(float va){ this->resolution = va;}
 
 
     double valeur_pixel2d(vec2   point){

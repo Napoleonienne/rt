@@ -143,6 +143,7 @@ std::print("\n");
 
     
 }
+
 void test();
 
 void mainloop(){
@@ -177,7 +178,6 @@ void mainloop(){
 int main(){
 
  //mainloop();
- terrrain(77888,40,40);
 
  test();
 

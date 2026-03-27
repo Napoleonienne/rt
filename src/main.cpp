@@ -6,7 +6,8 @@
 #include <algorithm>
 #include <ranges>
 #include <perlinnoise.hpp>
-
+#include "hit.hpp"
+#include "forme.hpp"
 
 constexpr auto aspect_ratio = 16.0 / 9.0;
 constexpr int image_width = 800;
@@ -34,7 +35,10 @@ auto viewport_upper_left = camera_center
                             - vec3(0, 0, focal_length) - viewport_u/2.0 - viewport_v/2.0;
 auto pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
 
-
+const auto pixels = std::views::cartesian_product(
+    std::views::iota(0, image_height), // Les lignes (j)
+    std::views::iota(0, image_width)   // Les colonnes (i)
+);
 
 
 
@@ -63,12 +67,10 @@ double hit_sphere(const point3& center, double radius, const ray& r) {
 
 
 
-color ray_color(const ray& r) {
-    double hit = hit_sphere(point3(0,0,-1.f), 0.5, r);
-    if (hit>0){
-
-        vec3 N = glm::normalize(r.at(hit) - vec3(0,0,-1));
-        return 0.5*color(N.x+1, N.y+1, N.z+1);
+color ray_color(const ray& r, const hittable& world) {
+    hit_record rec;
+    if (world.hit(r, 0, infinity, rec)) {
+        return 0.5 * (rec.normal + color(1,1,1));
     }
 
     vec3 unit_direction = glm::normalize(r.direction());
@@ -90,10 +92,7 @@ void dump(const bufferm<vec3> &buffer, std::ofstream &f) {
 
 void render(bufferm<vec3>& buffer){
 // Dans la fonction vide
-    auto pixels = std::views::cartesian_product(
-        std::views::iota(0, image_height), // Les lignes (j)
-        std::views::iota(0, image_width)   // Les colonnes (i)
-    );
+
 
     for (auto [j, i] : pixels) {
         auto pixel_center = pixel00_loc + (static_cast<double>(i) * pixel_delta_u) + (static_cast<double>(j) * pixel_delta_v);
@@ -144,6 +143,9 @@ std::print("\n");
     
 }
 
+
+
+
 void test();
 
 void mainloop(){
@@ -178,9 +180,11 @@ void mainloop(){
 int main(){
 
  //mainloop();
+hittable_list world;
 
- test();
-
+world.add(make_shared<sphere>(point3(0,0,-1), 0.5));
+world.add(make_shared<sphere>(point3(0,-100.5,-1), 100));
+mainloop();
 
 
 return 0;

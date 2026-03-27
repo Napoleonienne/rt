@@ -7,12 +7,14 @@
 #include <ranges>
 
 
+
 using vec2   = glm::dvec2;
 
 using vec3   = glm::dvec3;
 using point3 = glm::dvec3;
 
 
+constexpr double infinity = std::numeric_limits<double>::infinity();
 // Formatting
 template <>
 struct std::formatter<vec3> : std::formatter<std::string_view> {

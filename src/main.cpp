@@ -191,6 +191,7 @@ return 0;
 void test(){
 
 noise::perlin test(5758,8,0.4,glm::pi<double>());
+test.set_resolution(16.);
 
 std::ofstream file("perlin.pgm") ;
 

@@ -8,15 +8,6 @@ using std::make_shared;
 using std::shared_ptr;
 
 
-class hittable {
-  public:
-    virtual ~hittable() = default;
-
-    virtual bool hit(const ray& r, double ray_tmin, double ray_tmax, hit_record& rec) const = 0;
-};
-
-
-
 class hit_record {
   public:
     point3 p;
@@ -33,6 +24,17 @@ class hit_record {
         normal = front_face ? outward_normal : -outward_normal;
     }
 };
+
+class hittable {
+  public:
+    virtual ~hittable() = default;
+
+    virtual bool hit(const ray& r, double ray_tmin, double ray_tmax, hit_record& rec) const = 0;
+};
+
+
+
+
 
 class hittable_list : public hittable {
   public:

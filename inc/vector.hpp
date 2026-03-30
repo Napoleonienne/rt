@@ -1,4 +1,5 @@
 #pragma once
+#define GLM_SWIZZLE_FUNCTION
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 #include <format>

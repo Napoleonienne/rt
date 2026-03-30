@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include "vector.hpp"
-#include "memory"
 
 class ray {
   public:

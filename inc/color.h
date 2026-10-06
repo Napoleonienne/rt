@@ -1,8 +1,6 @@
 #pragma once
 #include "vector.hpp"
-#include <iostream>
 #include <print>
-#include "cstdio"
 #include <fstream>
 
 using color = vec3;

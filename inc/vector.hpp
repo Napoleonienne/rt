@@ -5,7 +5,6 @@
 #include <format>
 #include <iostream>
 #include <iterator>
-#include <ranges>
 
 
 

@@ -1,3 +1,4 @@
+#include <print>
 #include "vector.hpp"
 #include "color.h"
 #include "ray.h"
@@ -34,6 +35,7 @@ auto pixel_delta_v = viewport_v / static_cast<double>(image_height);
 auto viewport_upper_left = camera_center
                             - vec3(0, 0, focal_length) - viewport_u/2.0 - viewport_v/2.0;
 auto pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
+
 
 const auto pixels = std::views::cartesian_product(
     std::views::iota(0, image_height), // Les lignes (j)
@@ -90,7 +92,7 @@ void dump(const bufferm<vec3> &buffer, std::ofstream &f) {
 
 
 
-void render(bufferm<vec3>& buffer){
+void render(bufferm<vec3>& buffer,hittable_list world){
 // Dans la fonction vide
 
 
@@ -99,7 +101,7 @@ void render(bufferm<vec3>& buffer){
         auto ray_direction = pixel_center - camera_center;
         ray r(camera_center, ray_direction);
 
-        buffer[i, j] = ray_color(r);
+        buffer[i, j] = ray_color(r,world);
     }
 
 
@@ -148,43 +150,33 @@ std::print("\n");
 
 void test();
 
-void mainloop(){
-    // Dans le main
+void mainloop(hittable_list world){
+
     bufferm<vec3> buffer(image_width,image_height);
-    // Render
 
     for(int k: std::views::iota(0, 1) ) {
         auto op = std::format("image{}.ppm",k);
         std::ofstream FILE(op) ;
         std::println(FILE, "P3\n{} {} \n255", image_width, image_height);
-        render(buffer);
+        render(buffer, world);
 
 
-
-
-
-        // std::clog << "\rframes : " << k << ' ' << std::flush;
-
-
-
+    // std::clog << "\rframes : " << k << ' ' << std::flush;
 
     dump(buffer,FILE);
-    //std::clog << "\rDone.                 \n";
-
-
+                    //\n";
 }
 }
 
 
 
-int main(){
+int main(int arg){
 
- //mainloop();
 hittable_list world;
 
-world.add(make_shared<sphere>(point3(0,0,-1), 0.5));
-world.add(make_shared<sphere>(point3(0,-100.5,-1), 100));
-mainloop();
+world.add(make_shared<object::sphere>(point3(0,0,-1), 0.5));
+world.add(make_shared<object::sphere>(point3(0,-100.5,-1), 100));
+mainloop(world);
 
 
 return 0;

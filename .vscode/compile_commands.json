@@ -1,6 +1,11 @@
 [
 {
-  "directory": "/home/guy/Bureau/rt",
-  "arguments": ["/usr/bin/clang++-21", "-c", "-Qunused-arguments", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++26", "-Iinc", "-DNDEBUG", "-o", "build/.objs/rt/linux/x86_64/release/src/main.cpp.o", "src/main.cpp"],
-  "file": "src/main.cpp"
+  "directory": "/home/guy/Documents/developement/rt",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-m64", "-g", "-O0", "-std=c++23", "-Iinc", "-DSPDLOG_SHARED_LIB", "-DSPDLOG_COMPILED_LIB", "-DSPDLOG_FMT_EXTERNAL", "-o", "build/.objs/rasteriser/linux/x86_64/debug/src/rasterizer/mainrast.cpp.o", "src/rasterizer/mainrast.cpp"],
+  "file": "src/rasterizer/mainrast.cpp"
+},
+{
+  "directory": "/home/guy/Documents/developement/rt",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-m64", "-g", "-O0", "-std=c++23", "-Iinc", "-DSPDLOG_SHARED_LIB", "-DSPDLOG_COMPILED_LIB", "-DSPDLOG_FMT_EXTERNAL", "-o", "build/.objs/rt/linux/x86_64/debug/src/raytracing/main.cpp.o", "src/raytracing/main.cpp"],
+  "file": "src/raytracing/main.cpp"
 }]

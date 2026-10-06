@@ -2,14 +2,14 @@
 #include <cmath>
 #include "vector.hpp"
 #include <utility.hpp>
-#include <vector>
 #include <random>
 #include <algorithm>
 #include <array>
 #include <execution>
+#include <ranges>
 
 
- std::array<vec2, 32> gradients_32 = {{
+const std::array<vec2, 32> gradients_32 = {{
     { 1.000,  0.000}, { 0.981,  0.195}, { 0.924,  0.383}, { 0.831,  0.556},
     { 0.707,  0.707}, { 0.556,  0.831}, { 0.383,  0.924}, { 0.195,  0.981},
     { 0.000,  1.000}, {-0.195,  0.981}, {-0.383,  0.924}, {-0.556,  0.831},
@@ -85,11 +85,11 @@ std::for_each(std::execution::par, pixels.begin(), pixels.end(), [&](auto coord)
 
     
     private:
-    double max1 = 1.0*std::pow(Persistance,Octaves-1);
     int Octaves;
     const int seed;
     float Lacunarite;
     float Persistance;
+    double max1 = 1.0*std::pow(Persistance,Octaves-1);
     double resolution =32.;
     std::array<double, 512> tableau;
 
@@ -247,11 +247,12 @@ std::for_each(std::execution::par, pixels.begin(), pixels.end(), [&](auto coord)
     }
   
     private:
-    double max1 = 1.0*std::pow(Persistance,Octaves-1);
+  
     int Octaves;
     const int seed;
     float Lacunarite;
     float Persistance;
+    double max1 = 1.0*std::pow(Persistance,Octaves-1);
     std::array<double, 512> tableau;
     double G2 = (3.0 - std::sqrt(3.0)) / 6.0;
     float F2=(glm::sqrt(3.0)-1.)/2.;
@@ -287,7 +288,7 @@ std::for_each(std::execution::par, pixels.begin(), pixels.end(), [&](auto coord)
 
       
 
-
+      return 0.;
     }
     
 

@@ -32,8 +32,7 @@ auto pixel_delta_u = viewport_u / static_cast<double>(image_width);
 auto pixel_delta_v = viewport_v / static_cast<double>(image_height);
 
 // Calculate the location of the upper left pixel.
-auto viewport_upper_left = camera_center
-                            - vec3(0, 0, focal_length) - viewport_u/2.0 - viewport_v/2.0;
+auto viewport_upper_left = camera_center- vec3(0, 0, focal_length) - viewport_u/2.0 - viewport_v/2.0;
 auto pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
 
 
@@ -151,6 +150,7 @@ std::print("\n");
 void test();
 
 void mainloop(hittable_list world){
+    test();
 
     bufferm<vec3> buffer(image_width,image_height);
 
@@ -170,7 +170,9 @@ void mainloop(hittable_list world){
 
 
 
-int main(int arg){
+int main(int argc, char* argv[]){
+
+
 
 hittable_list world;
 

@@ -1,0 +1,13 @@
+{
+    ["avr-devel"] = {
+        repo = {
+            branch = "master",
+            commit = "2db201aa988136da0170052ec55c4908dc4cf260",
+            url = "https://gitlab.com/tboox/xmake-repo.git"
+        },
+        version = "v1.0.0"
+    },
+    __meta__ = {
+        version = "1.0"
+    }
+}

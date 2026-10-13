@@ -4,7 +4,7 @@ set_languages("c++23","c23")
 set_toolchains("clang")
 add_requires("glm","spdlog","libsdl3 3.4.18","spdlog")
 
-
+add_addons("avr-devel 1.0.0")
 
 target("rt")
     add_syslinks("tbb")

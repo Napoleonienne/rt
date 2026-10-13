@@ -7,9 +7,10 @@
 #include <cstdint>
 #include <algorithm>
 #include <cstddef>
-
-constexpr uint32_t largeur = 800;
-constexpr uint32_t hauteur = 600;
+#include <cmath>
+#include "camera.hpp"
+constexpr uint32_t LARGEUR = 800;
+constexpr uint32_t HAUTEUR = 600;
 
 
 
@@ -18,12 +19,12 @@ class framebuffer {
 public:
     using value_type = T;
     using size_type  = std::size_t;
+    framebuffer(){}
 
     framebuffer(size_type l, size_type h, const T& default_val = T{})
         : donnees(l * h, default_val), m_largeur(l), m_hauteur(h) {}
 
-    // Support complet du déplacement et de la copie
-    framebuffer(const framebuffer&) = default;
+    framebuffer(const framebuffer&) = delete;
     framebuffer& operator=(const framebuffer&) = default;
     framebuffer(framebuffer&&) noexcept = default;
     framebuffer& operator=(framebuffer&&) noexcept = default;
@@ -31,13 +32,16 @@ public:
 
     // --- Redimensionnement ---
     void redimensionner(size_type nouveau_l, size_type nouveau_h, const T& clear_val = T{}) {
+        auto av_ch= iterateur();
         m_largeur = nouveau_l;
         m_hauteur = nouveau_h;
-        std::views::cartesian_product(largeur(),auteur());
+
+        auto ap_ch = iterateur();
+        for (auto [y,x] :ap_ch) {
+            
+
         
-
-
-
+        }
 
         donnees.assign(m_largeur * m_hauteur, clear_val);
     }
@@ -64,6 +68,14 @@ public:
     [[nodiscard]] constexpr const T& operator[](glm::ivec2 p) const noexcept {
         return donnees[static_cast<size_type>(p.y) * m_largeur + static_cast<size_type>(p.x)];
     }
+    [[nodiscard]] constexpr const T& operator[](glm::vec2 p) const noexcept {
+        if( (-1 <= p.x || p.x <= 1) && (-1<= p.y|| p.y <= 1) )
+            return donnees[static_cast<size_type>((p.y+hauteur()/2)*hauteur()) * m_largeur + static_cast<size_type>((p.x+largeur()/2)*largeur())];
+        else{
+            spdlog::error("si la position est un vec2 alors sa doit etre entre -1 et 1" );
+            return T(0);
+        }
+    }
 
     // --- Accès direct à la mémoire contiguë ---
     [[nodiscard]] T* data() noexcept { return donnees.data(); }
@@ -88,64 +100,138 @@ public:
         return std::span<const T>(donnees.data() + (y * m_largeur), m_largeur);
     }
 
+     /*
+     renvoir un iterateur 
+     odre d'abord y puis x
+        
+        
+        */
+    auto iterateur(){
+    
+        
+        auto y_range = std::views::iota(0, static_cast<int>(hauteur()));
+        auto x_range = std::views::iota(0, static_cast<int>(largeur()));
+
+        return std::views::cartesian_product(y_range,x_range) ;
+    }
     // --- Métadonnées ---
-    [[nodiscard]] constexpr size_type largeur() const noexcept { return m_largeur; }
-    [[nodiscard]] constexpr size_type hauteur() const noexcept { return m_hauteur; }
-    [[nodiscard]] constexpr size_type pitch() const noexcept { return m_largeur * sizeof(T); }
-    [[nodiscard]] constexpr size_type size() const noexcept { return donnees.size(); }
+    [[nodiscard]] constexpr  int largeur() const noexcept { return m_largeur; }
+    [[nodiscard]] constexpr  int hauteur() const noexcept { return m_hauteur; }
+    [[nodiscard]] constexpr  int pitch() const noexcept { return m_largeur * sizeof(T); }
+    [[nodiscard]] constexpr  int size() const noexcept { return donnees.size(); }
+
+
+
+    void set_hauteur(int nv){
+        m_hauteur = nv;
+    }
+     void set_largeur(int nv){
+        m_largeur = nv;
+    }
 
 private:
     std::vector<T> donnees;
-    size_type m_largeur;
-    size_type m_hauteur;
+    size_type m_largeur =0;
+    size_type m_hauteur =0;
 };
 
 
-
-void write_color( const glm::vec3& pixel_color,uint32_t* scren) {
-    auto r = pixel_color.x;
-    auto g = pixel_color.y;
-    auto b = pixel_color.z;
-
-    int rbyte = int(255.999 * r);
-    int gbyte = int(255.999 * g);
-    int bbyte = int(255.999 * b);
+glm::vec4 interpolation(glm::vec4 a ,glm::vec4 b){
+    glm::vec4 dist = b-a;
+    glm::vec4 res =b;
 
 
+
+    return res;
+}
+
+void Depth_Test(
+    framebuffer<glm::vec4> &buff,
+    framebuffer<float> &zbuffering,glm::vec3 pos){
+
+    
+
+
+    
+        return;
 }
 
 
 
-inline void ecrit_couleur(uint32_t* raw, int taille_ligne, glm::ivec2 pos, glm::uvec4 couleur) {
+uint32_t convertir( const glm::vec4& pixel_color,glm::vec3 pos) {
+    auto r = pixel_color.x;
+    auto g = pixel_color.y;
+    auto b = pixel_color.z;
+    uint32_t res;
+   
+    int rbyte = uint32_t(255.999 * r) ;
+    int gbyte = uint32_t(255.999 * r);
+    int bbyte = uint32_t(255.999 * r);
+    int alpha = uint32_t(255.999 * r);
+
+    res = rbyte|gbyte << 8|bbyte << 16 |alpha << 24;
+
+
+    return res;
+
+}
+
+void dump(framebuffer<glm::vec4> &buff,framebuffer<float> &zbuffering,uint32_t* raw){
+
+
+    for (auto [y,x]:buff.iterateur()) {
+        uint32_t couleur = convertir( buff[x,y],glm::vec3(x,y,1));
+        raw[y*buff.largeur()+x] = couleur ;
+    }
+}
+
+
+
+void ecrit_couleur(uint32_t* raw, int taille_ligne, glm::ivec2 pos, glm::uvec4 couleur) {
     raw[pos.y * taille_ligne + pos.x] = static_cast<uint32_t>(couleur.r)        |
                                        (static_cast<uint32_t>(couleur.g) << 8)  |
                                        (static_cast<uint32_t>(couleur.b) << 16) |
                                        (static_cast<uint32_t>(couleur.a) << 24);
 }
 
-void aire_rec(glm::ivec3 &a, glm::ivec3 &b, glm::ivec3 &c) {
-  auto base = b - a;
-  auto hauteur = (base) / 2;
-  int aire = (glm::length(base) * glm::length(c - hauteur)) / 2;
-}
 
 
 
-void ligne(uint32_t raw,int taile_ligne, glm::uvec3 a,glm::uvec3 b,glm::uvec4 couleur){
-    auto step =0.1f;
 
-    auto ran01 = std::views::iota(0, 100)| std::views::transform([step](int i) { return i * step; });
-    int longe = glm::length(b-a);
-    for (auto t :ran01 ) {
-        
-        
-    
+void Bresenha_line_drawing( glm::ivec3 vec1,glm::ivec3 vec2,glm::vec4 couleur,framebuffer<glm::vec4> &buff){
+    //auto ran01 = std::views::iota(0, 100)| std::views::transform([](int i) { return i * 0.01f; });
+    int ax,ay,bx,by;
+    ax =vec1.x;
+    ay = vec1.y;
+    bx = vec2.x;
+    by = vec2.y;
+
+    bool steep = std::abs(ax-bx) < std::abs(ay-by);
+    if (steep) { // if the line is steep, we transpose the image
+
+        std::swap(ax, ay);
+        std::swap(bx, by);
+    }
+    if (ax>bx) { // make it left−to−right
+        std::swap(ax, bx);
+        std::swap(ay, by);
+    }
+    int y = ay;
+    int ierror = 0;
+    for (int x=ax; x<=bx; x++) {
+        if (steep) // if transposed, de−transpose
+            buff[y,x] =couleur;
+        else
+            buff[x,y] =couleur;
+        ierror += 2 * std::abs(by-ay);
+        y += (by > ay ? 1 : -1) * (ierror > bx - ax);
+        ierror -= 2 * (bx-ax)   * (ierror > bx - ax);
     }
 
-
+}
 
     
-}
+
 
 
 void triangle(uint32_t raw,int taile_ligne, glm::uvec3 a,glm::uvec3 b,glm::uvec3 c,glm::uvec4 couleur){
@@ -158,6 +244,7 @@ void triangle(uint32_t raw,int taile_ligne, glm::uvec3 a,glm::uvec3 b,glm::uvec3
 class rasteriser {
 public:
     rasteriser() = default;
+
 
     ~rasteriser() {
         liberer();
@@ -186,9 +273,11 @@ private:
     SDL_Renderer* renderer = nullptr;
     SDL_Texture* screen_texture = nullptr;
     SDL_Surface* cpu_surface = nullptr;
-    bufferm<glm::uvec4> ab;
-    uint32_t largeur = 800;
-    uint32_t hauteur = 600;
+    uint32_t largeur = LARGEUR;
+    uint32_t hauteur = HAUTEUR;
+    framebuffer<glm::vec4> frame1 =framebuffer<glm::vec4>(largeur,hauteur) ;
+    framebuffer<float> zbuffer =framebuffer<float>(largeur,hauteur,-INFINITY) ;
+
 
 
     bool running = true;
